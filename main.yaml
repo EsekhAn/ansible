@@ -41,7 +41,7 @@
 
     - name: Copy build compose file
       ansible.builtin.copy:
-        src: "{{ repo_dir }}/docker-compose.build.yml"
+        src: "{{ repo_dir }}/docker-compose.build.yaml"
         dest: /opt/myapp/docker-compose.yml
         mode: '0644'
         remote_src: yes
