@@ -55,3 +55,73 @@
       ansible.builtin.command:
         cmd: docker compose down
         chdir: /opt/myapp
+
+- name: Deploy and run application on prod node
+  hosts: prod
+  become: yes
+  vars:
+    repo_url: "https://github.com/EsekhAn/ansible.git"
+    repo_version: "master"
+    repo_dir: "/opt/myapp/repo"
+    build_artifacts_dir: "/opt/myapp/artifacts"
+    prod_artifacts_dir:  "/opt/myapp/artifacts"
+
+  tasks:
+    - name: Ensure Docker, compose plugin, git and rsync are installed
+      ansible.builtin.package:
+        name:
+          - docker.io
+          - docker-compose-plugin
+          - git
+          - rsync
+        state: present
+
+    - name: Ensure docker service is running
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - /opt/myapp
+        - "{{ repo_dir }}"
+        - "{{ prod_artifacts_dir }}"
+
+    - name: Clone or update repo on prod node
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        version: "{{ repo_version }}"
+        dest: "{{ repo_dir }}"
+        force: yes
+
+    - name: Copy war from build node to prod node via rsync
+      ansible.builtin.synchronize:
+        src: "{{ build_artifacts_dir }}/app.war"
+        dest: "{{ prod_artifacts_dir }}/app.war"
+        mode: push
+        rsync_opts:
+          - "--chmod=F0644"
+      delegate_to: "{{ groups['build'][0] }}"
+
+    - name: Copy prod compose file
+      ansible.builtin.copy:
+        src: "{{ repo_dir }}/docker-compose.prod.yaml"
+        dest: /opt/myapp/docker-compose.yml
+        mode: '0644'
+        remote_src: yes
+
+    - name: Start Tomcat
+      ansible.builtin.command:
+        cmd: docker compose up
+        chdir: /opt/myapp
+
+    - name: Wait for Tomcat port
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: 8080
+        timeout: 60
