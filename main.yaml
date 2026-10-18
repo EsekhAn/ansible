@@ -39,19 +39,19 @@
         force: yes
         #accept_hostkey: yes
 
-    #- name: Copy build compose file
-    #  ansible.builtin.copy:
-    #    src: "{{ repo_dir }}/docker-compose.build.yml"
-    #    dest: /opt/myapp/docker-compose.yml
-    #    mode: '0644'
-    #    remote_src: yes
+    - name: Copy build compose file
+      ansible.builtin.copy:
+        src: "{{ repo_dir }}/docker-compose.build.yml"
+        dest: /opt/myapp/docker-compose.yml
+        mode: '0644'
+        remote_src: yes
 
-    #- name: Run builder container
-      #ansible.builtin.command:
-        #cmd: docker compose up --abort-on-container-exit --exit-code-from builder
-        #chdir: /opt/myapp
+    - name: Run builder container
+      ansible.builtin.command:
+        cmd: docker compose up --abort-on-container-exit --exit-code-from builder
+        chdir: /opt/myapp
 
-    #- name: Tear down build compose project
-      #ansible.builtin.command:
-        #cmd: docker compose down
-        #chdir: /opt/myapp
+    - name: Tear down build compose project
+      ansible.builtin.command:
+        cmd: docker compose down
+        chdir: /opt/myapp
