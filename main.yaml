@@ -8,11 +8,10 @@
     build_artifacts_dir: "/opt/myapp/artifacts"
 
   tasks:
-    - name: Ensure Docker, compose plugin and git are installed
+    - name: Ensure Docker and git are installed
       ansible.builtin.package:
         name:
           - docker.io
-          #- docker-compose-plugin
           - git
         state: present
     - name: Ensure docker service is running
@@ -67,12 +66,11 @@
     prod_artifacts_dir:  "/opt/myapp/artifacts"
 
   tasks:
-    - name: Ensure Docker, compose plugin, git and rsync are installed
+    - name: Ensure Docker, git and rsync are installed
       ansible.builtin.package:
         name:
           - docker.io
-          #- docker-compose-plugin
-          - git
+            - git
           - rsync
         state: present
 
