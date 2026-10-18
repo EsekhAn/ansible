@@ -117,7 +117,7 @@
 
     - name: Start Tomcat
       ansible.builtin.command:
-        cmd: docker compose up
+        cmd: docker compose up -d --force-recreate
         chdir: /opt/myapp
 
     - name: Wait for Tomcat port
