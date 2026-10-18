@@ -12,7 +12,7 @@
       ansible.builtin.package:
         name:
           - docker.io
-          - docker-compose-plugin
+          #- docker-compose-plugin
           - git
         state: present
     - name: Ensure docker service is running
