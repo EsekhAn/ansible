@@ -1,0 +1,17 @@
+- name: Build project on build node
+  hosts: build
+  become: yes
+  vars:
+    repo_url: "git@github.com:EsekhAn/ansible.git"
+    repo_version: "main"
+    repo_dir: "/opt/myapp/repo"                 
+    build_artifacts_dir: "/opt/myapp/artifacts"
+
+  tasks:
+    - name: Ensure Docker, compose plugin and git are installed
+      ansible.builtin.package:
+        name:
+          - docker.io
+          - docker-compose-plugin
+          - git
+        state: present
