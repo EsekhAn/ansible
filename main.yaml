@@ -48,7 +48,7 @@
 
     - name: Run builder container
       ansible.builtin.command:
-        cmd: docker compose up --abort-on-container-exit --exit-code-from builder
+        cmd: docker compose up
         chdir: /opt/myapp
 
     - name: Tear down build compose project
