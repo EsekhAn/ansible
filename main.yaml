@@ -71,7 +71,7 @@
       ansible.builtin.package:
         name:
           - docker.io
-          - docker-compose-plugin
+          #- docker-compose-plugin
           - git
           - rsync
         state: present
