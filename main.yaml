@@ -2,7 +2,7 @@
   hosts: build
   become: yes
   vars:
-    repo_url: "git@github.com:EsekhAn/ansible.git"
+    repo_url: "https://github.com/EsekhAn/ansible.git"
     repo_version: "master"
     repo_dir: "/opt/myapp/repo"                 
     build_artifacts_dir: "/opt/myapp/artifacts"
@@ -37,7 +37,7 @@
         version: "{{ repo_version }}"
         dest: "{{ repo_dir }}"
         force: yes
-        accept_hostkey: yes
+        #accept_hostkey: yes
 
     #- name: Copy build compose file
     #  ansible.builtin.copy:
