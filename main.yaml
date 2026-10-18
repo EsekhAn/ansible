@@ -37,6 +37,7 @@
         version: "{{ repo_version }}"
         dest: "{{ repo_dir }}"
         force: yes
+        accept_hostkey: yes
 
     #- name: Copy build compose file
     #  ansible.builtin.copy:
